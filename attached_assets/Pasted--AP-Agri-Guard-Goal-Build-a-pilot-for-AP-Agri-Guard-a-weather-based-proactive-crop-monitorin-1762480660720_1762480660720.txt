@@ -1,0 +1,315 @@
+
+
+ “AP Agri Guard” 
+
+Goal
+Build a pilot for AP Agri Guard, a weather-based, proactive crop-monitoring system focused on Andhra Pradesh (Krishna & Guntur). Deliver a monorepo with:
+	1.	Mobile Farmer App (React Native, Expo)
+	2.	Web Dashboard (Next.js, App Router)
+
+For now, frontend = backend: everything reads/writes local JSON + IndexedDB/AsyncStorage via a mock service layer.
+
+⸻
+
+Tech & Repo Structure
+	•	Monorepo: Turborepo
+	•	apps/mobile – Expo React Native (Android/iOS)
+	•	apps/web – Next.js (App Router) + Tailwind + shadcn/ui
+	•	packages/shared – TypeScript types, mock data, services, rule engine, i18n strings, GeoJSON
+	•	UI
+	•	Mobile: NativeWind (+ React Native Paper or Tamagui)
+	•	Web: Tailwind + shadcn/ui
+	•	State & Storage
+	•	Zustand everywhere
+	•	Mobile: AsyncStorage/MMKV
+	•	Web: IndexedDB (via idb)
+	•	Maps
+	•	Web: MapLibre GL
+	•	Mobile: react-native-maps (draw polygon, mock “walk boundary”)
+	•	Charts
+	•	Web: Recharts
+	•	Mobile: Victory Native
+	•	Time & i18n
+	•	Day.js (IST default)
+	•	i18next – Telugu default, English fallback
+
+⸻
+
+Auth & Roles (username-only)
+
+No passwords. User enters a username; app infers role from a fixed map (store locally):
+
+{
+  "farmer_krishna": "FARMER",
+  "farmer_guntur": "FARMER",
+  "officer_krishna": "FIELD_OFFICER",
+  "officer_guntur": "FIELD_OFFICER",
+  "operator": "OPERATOR",
+  "admin": "ADMIN",
+  "datasci": "DATA_SCIENTIST"
+}
+
+	•	FARMER → mobile app flow.
+	•	FIELD_OFFICER / OPERATOR / ADMIN / DATA_SCIENTIST → web dashboard.
+	•	Add quick-select chips with these usernames on the login screens.
+
+⸻
+
+Data Model (packages/shared/schema.ts)
+
+export type District = "Krishna" | "Guntur";
+
+export type Mandal = { id: string; name: string; district: District };
+export type Village = { id: string; name: string; mandalId: string };
+
+export type Plot = {
+  id: string;
+  farmerId: string;
+  name: string;
+  district: District;
+  mandalId: string;
+  villageId: string;
+  centroid: { lat: number; lon: number };
+  boundary?: Array<{ lat: number; lon: number }>;
+  cropCycleId?: string;
+};
+
+export type Crop = "Paddy" | "Chilli";
+export type Stage =
+  | "Nursery" | "Transplanting" | "Tillering" | "Panicle" | "Harvest"
+  | "Vegetative" | "Flowering" | "FruitSet";
+
+export type CropCycle = {
+  id: string;
+  plotId: string;
+  crop: Crop;
+  variety?: string;
+  sowingDate: string; // ISO
+  stage: Stage;
+  kcCurve?: Array<{ dayFromSowing: number; kc: number }>;
+};
+
+export type WxDaily = {
+  id: string;
+  gridId: string; date: string;
+  rain_mm: number;
+  tmin_c: number; tmax_c: number;
+  rh_pct: number; wind_ms: number;
+  radiation?: number;
+};
+
+export type SignalDaily = {
+  id: string; plotId: string; date: string;
+  eto: number; etc: number; vpd: number; gdd: number;
+  ndvi?: number; ndwi?: number;
+};
+
+export type Hazard =
+  | "PADDY_BLAST" | "PADDY_BLB"
+  | "CHILLI_ANTHRACNOSE" | "CHILLI_THRIPS"
+  | "FLOOD";
+
+export type RiskEvent = {
+  id: string;
+  plotId: string;
+  date: string;
+  hazard: Hazard;
+  score: number; // 0-100
+  severity: "green" | "orange" | "red";
+  messageKey: string; // i18n key
+  explain?: string[];
+  ack?: boolean;
+};
+
+export type AdvisoryTemplate = {
+  id: string;
+  hazard: Hazard | "GENERIC";
+  messageKey: string; // i18n
+  channels: Array<"IN_APP" | "WHATSAPP" | "SMS" | "IVR">;
+  placeholders?: string[]; // e.g., ["plotName","mm","date"]
+};
+
+
+⸻
+
+Seeds (packages/shared/mockdb/*.json)
+	•	Geo: Districts Krishna & Guntur; 3–4 Mandals each; 2–3 Villages per mandal; add small GeoJSON for mandal/village outlines.
+	•	Users: the usernames above.
+	•	Farmers & Plots:
+	•	farmer_krishna: two Paddy plots (Gudivada, Avanigadda)
+	•	farmer_guntur: two Chilli plots (Tenali, Prathipadu)
+	•	Include square boundaries and realistic centroids
+	•	WxDaily: 21 days of synthetic but plausible weather for two 0.1° grids (rain/tmax/tmin/rh/wind).
+	•	SignalDaily: ETo/ETc/VPD/GDD precomputed for the same days.
+	•	AdvisoryTemplates: 12 templates in both Telugu & English.
+	•	Sample Alerts: a few prebuilt (green/orange/red) across hazards.
+
+⸻
+
+i18n (packages/shared/i18n/{te,en}.json)
+	•	Telugu is default; English fallback.
+	•	Include keys like:
+
+{
+  "login.title": "AP Agri Guard",
+  "hazard.PADDY_BLAST": "పెడ్డి బ్లాస్ట్ హెచ్చరిక",
+  "hazard.PADDY_BLB": "బ్యాక్టీరియల్ లీఫ్ బ్లైట్ హెచ్చరిక",
+  "hazard.CHILLI_ANTHRACNOSE": "మిరప యాంత్రాక్నోస్ రిస్క్",
+  "hazard.CHILLI_THRIPS": "మిరప త్రిప్స్ రిస్క్",
+  "hazard.FLOOD": "వరద/లాడ్జింగ్ రిస్క్",
+  "advice.irrigate.now": "రాబోయే 24 గంటల్లో వర్షం లేదు. సుమారు {{mm}} మి.మి. నీరు ఇవ్వండి.",
+  "advice.avoid.spray.rain": "వర్ష సూచన ఉంది. 6–8 గంటల పొడి సమయం వచ్చిన తరువాతే స్ప్రే చేయండి.",
+  "action.acknowledge": "సరే",
+  "label.severity.green": "తక్కువ",
+  "label.severity.orange": "మధ్యస్థ",
+  "label.severity.red": "అధిక"
+}
+
+
+⸻
+
+Mock Services (packages/shared/services/*)
+	•	db.ts: read/write JSON in web (IndexedDB) and mobile (AsyncStorage).
+	•	geo.ts: list districts/mandals/villages; return GeoJSON.
+	•	plots.ts: CRUD plots (polygon + centroid); update crop/stage.
+	•	signals.ts: read signals by plot/date range.
+	•	alerts.ts: create/list/acknowledge alerts.
+	•	Web only: Next.js /api/* routes use the same functions to simulate a backend (local JSON in packages/shared/mockdb).
+	•	Mobile: calls go directly to the service layer.
+
+⸻
+
+YAML Rule Engine (transparent)
+	•	File: packages/shared/rules.yaml with five hazards:
+
+- id: PADDY_BLAST
+  severity_thresholds: { green: 0, orange: 40, red: 70 }
+  clauses:
+    - all:
+        - { metric: "rh_pct", op: ">=", value: 90, window: "today" }
+        - { metric: "tmean_c", op: "between", value: [24, 28], window: "today" }
+        - { metric: "leaf_wet_proxy", op: ">=", value: 4, window: "today" }
+      weight: 30
+    - any:
+        - { metric: "rain_mm", op: ">=", value: 10, window: "prev24h" }
+        - { metric: "dew_morning", op: "==", value: true, window: "today" }
+      weight: 20
+  messageKey: "hazard.PADDY_BLAST"
+
+- id: PADDY_BLB
+  severity_thresholds: { green: 0, orange: 40, red: 70 }
+  clauses:
+    - all:
+        - { metric: "tmean_c", op: "between", value: [25, 34], window: "today" }
+        - { metric: "rh_pct", op: ">", value: 70, window: "today" }
+        - { metric: "wind_ms", op: ">=", value: 8, window: "prev24h" }
+      weight: 35
+  messageKey: "hazard.PADDY_BLB"
+
+- id: CHILLI_ANTHRACNOSE
+  severity_thresholds: { green: 0, orange: 40, red: 70 }
+  clauses:
+    - all:
+        - { metric: "tmean_c", op: "near", value: 27, tol: 2, window: "today" }
+        - { metric: "rh_pct", op: ">=", value: 80, window: "today" }
+        - { metric: "rain_mm", op: ">=", value: 5, window: "prev24h" }
+      weight: 30
+  messageKey: "hazard.CHILLI_ANTHRACNOSE"
+
+- id: CHILLI_THRIPS
+  severity_thresholds: { green: 0, orange: 40, red: 70 }
+  clauses:
+    - all:
+        - { metric: "vpd", op: ">=", value: 1.6, window: "today" }
+        - { metric: "rain_mm", op: "<", value: 2, window: "rolling_3d" }
+      weight: 30
+  messageKey: "hazard.CHILLI_THRIPS"
+
+- id: FLOOD
+  severity_thresholds: { green: 0, orange: 40, red: 70 }
+  clauses:
+    - all:
+        - { metric: "is_delta", op: "==", value: true }
+        - { metric: "barrage_warning", op: "==", value: true }
+        - { metric: "rain_mm", op: ">=", value: 60, window: "rolling_3d" }
+      weight: 40
+  messageKey: "hazard.FLOOD"
+
+	•	Parser/engine in packages/shared/rules.ts:
+	•	Converts YAML to evaluators over WxDaily + SignalDaily + crop stage.
+	•	Returns { hazard, score, severity, messageKey, explain[] }.
+	•	Severity thresholds: green <40, orange 40–69, red ≥70.
+	•	Include explain[] listing fired clauses.
+
+⸻
+
+Communications Module
+	•	Files: packages/shared/advisoryTemplates.te.json & .en.json with placeholders ({{plotName}}, {{mm}}, {{date}}).
+	•	Web /communications:
+	•	Left: template list + preview (Telugu/English).
+	•	Right: Composer: District → Mandal → Village → Farmer → Plot → Hazard → Channel badges (IN_APP/WHATSAPP/SMS/IVR).
+	•	“Send” writes a message record to local storage (no external APIs).
+	•	Mobile: “Shared with you” read-only list under Advisories.
+
+⸻
+
+Maps & Plot Tools
+	•	Web Map: layer toggles for District/Mandal/Village (from our GeoJSON). Heat overlay for today’s alert scores (green/orange/red).
+	•	Mobile Map: “Add Plot” → (A) draw polygon or (B) mock “Walk boundary” (tap sequence as GPS points). Show plot chips with crop, stage, worst hazard.
+
+⸻
+
+Optional “Online Mode” — NASA POWER (client-side only)
+	•	OFF by default. Toggle on: Web Overview & Mobile Settings.
+	•	packages/shared/services/power.ts: getDaily(lat, lon, startISO, endISO) → { rain_mm, tmin_c, tmax_c, rh_pct, wind_ms, radiation }, cached by (lat,lon,date) in IndexedDB/AsyncStorage.
+	•	Merge into WxDaily; if blocked/offline, fall back to mock data.
+	•	Show tiny banner “Live data (POWER)” when active.
+
+⸻
+
+Mobile App — Required Screens
+	•	Login (username chips) → infer role; FARMER lands here.
+	•	Home: today’s risk cards per plot; 7-day outlook; “Explain why?” expands explain[].
+	•	Plots: list/add/edit; choose crop/stage; draw/walk boundary.
+	•	Advisories: inbox of alerts & messages; filter by plot/hazard.
+	•	Map: plots + today’s risk heat.
+	•	Settings: language toggle (తెలుగు/English), Online Mode switch, “Reset demo”.
+	•	Dev Panel: “simulate tomorrow” (sliders for rain/temp/RH/wind) → re-run rules and append alerts (local only).
+
+⸻
+
+Web Dashboard — Required Pages
+	•	Login (username chips) → roles: FIELD_OFFICER / OPERATOR / ADMIN / DATA_SCIENTIST.
+	•	Overview: KPI cards (active farmers, plots, today red/orange), mini-map, Online Mode toggle.
+	•	Map: district/mandal/village layers + alert heat.
+	•	Alerts Queue: table with hazard, district, mandal, plot, severity, status; bulk acknowledge; CSV export.
+	•	Farmers & Plots: CRUD; side panel with signals chart (14-day rain/VPD/ETc) + last advisories; CSV export for signals.
+	•	Rules: two tabs — View (pretty YAML + narrative), Test (input weather → computed risk with explain[]).
+	•	Communications: templates + Composer (as above).
+	•	Localized Messages: read-only i18n keys used by advisories.
+
+⸻
+
+Commands & Dev Experience
+	•	Root README with setup and commands.
+	•	Scripts:
+	•	pnpm install (root)
+	•	pnpm dev:web → Next.js at localhost
+	•	pnpm dev:mobile → Expo dev server
+	•	pnpm lint, pnpm test
+	•	Seed data auto-loads on first run; all changes persist locally.
+
+⸻
+
+Acceptance Criteria
+	•	Username-only login selects role; chips for test accounts.
+	•	Telugu default; instant language toggle everywhere.
+	•	Farmer app shows seeded plots, risk cards, advisories; adding a plot updates immediately.
+	•	Rule engine runs on app open and “simulate tomorrow”; every alert includes explain[].
+	•	Web dashboard renders maps, alerts queue, rules view/test, and communications composer.
+	•	CSV exports for alerts & signals work from local data.
+	•	Optional Online Mode fetches POWER client-side and merges without breaking offline.
+
+⸻
+
+Deliver exactly the above. Generate clean, documented code with clear folders, TypeScript types, seed JSON/GeoJSON, YAML rules, i18n files, and a top-level README. Keep all data local for this pilot; structure the services to swap to real APIs later.
