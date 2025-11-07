@@ -1,0 +1,34 @@
+[
+  {
+    "id": "cycle_1",
+    "plotId": "plot_1",
+    "crop": "Paddy",
+    "variety": "BPT 5204",
+    "sowingDate": "2024-11-01",
+    "stage": "Tillering"
+  },
+  {
+    "id": "cycle_2",
+    "plotId": "plot_2",
+    "crop": "Paddy",
+    "variety": "MTU 1010",
+    "sowingDate": "2024-11-05",
+    "stage": "Transplanting"
+  },
+  {
+    "id": "cycle_3",
+    "plotId": "plot_3",
+    "crop": "Chilli",
+    "variety": "Teja",
+    "sowingDate": "2024-10-15",
+    "stage": "Flowering"
+  },
+  {
+    "id": "cycle_4",
+    "plotId": "plot_4",
+    "crop": "Chilli",
+    "variety": "G4",
+    "sowingDate": "2024-10-20",
+    "stage": "Vegetative"
+  }
+]

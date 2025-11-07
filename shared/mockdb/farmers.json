@@ -1,0 +1,16 @@
+[
+  {
+    "id": "farmer_1",
+    "username": "farmer_krishna",
+    "name": "Ramesh Kumar",
+    "phone": "+91 9876543210",
+    "district": "Krishna"
+  },
+  {
+    "id": "farmer_2",
+    "username": "farmer_guntur",
+    "name": "Lakshmi Devi",
+    "phone": "+91 9876543211",
+    "district": "Guntur"
+  }
+]

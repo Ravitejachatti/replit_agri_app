@@ -1,0 +1,70 @@
+[
+  {
+    "id": "plot_1",
+    "farmerId": "farmer_1",
+    "name": "Gudivada Field 1",
+    "district": "Krishna",
+    "mandalId": "mandal_krishna_1",
+    "villageId": "village_gudivada_1",
+    "centroid": { "lat": 16.4333, "lon": 80.9833 },
+    "boundary": [
+      { "lat": 16.4330, "lon": 80.9830 },
+      { "lat": 16.4336, "lon": 80.9830 },
+      { "lat": 16.4336, "lon": 80.9836 },
+      { "lat": 16.4330, "lon": 80.9836 },
+      { "lat": 16.4330, "lon": 80.9830 }
+    ],
+    "cropCycleId": "cycle_1"
+  },
+  {
+    "id": "plot_2",
+    "farmerId": "farmer_1",
+    "name": "Avanigadda Field 2",
+    "district": "Krishna",
+    "mandalId": "mandal_krishna_2",
+    "villageId": "village_avanigadda_1",
+    "centroid": { "lat": 16.0200, "lon": 80.9200 },
+    "boundary": [
+      { "lat": 16.0197, "lon": 80.9197 },
+      { "lat": 16.0203, "lon": 80.9197 },
+      { "lat": 16.0203, "lon": 80.9203 },
+      { "lat": 16.0197, "lon": 80.9203 },
+      { "lat": 16.0197, "lon": 80.9197 }
+    ],
+    "cropCycleId": "cycle_2"
+  },
+  {
+    "id": "plot_3",
+    "farmerId": "farmer_2",
+    "name": "Tenali Field 1",
+    "district": "Guntur",
+    "mandalId": "mandal_guntur_1",
+    "villageId": "village_tenali_1",
+    "centroid": { "lat": 16.2400, "lon": 80.6500 },
+    "boundary": [
+      { "lat": 16.2397, "lon": 80.6497 },
+      { "lat": 16.2403, "lon": 80.6497 },
+      { "lat": 16.2403, "lon": 80.6503 },
+      { "lat": 16.2397, "lon": 80.6503 },
+      { "lat": 16.2397, "lon": 80.6497 }
+    ],
+    "cropCycleId": "cycle_3"
+  },
+  {
+    "id": "plot_4",
+    "farmerId": "farmer_2",
+    "name": "Prathipadu Field 2",
+    "district": "Guntur",
+    "mandalId": "mandal_guntur_2",
+    "villageId": "village_prathipadu_1",
+    "centroid": { "lat": 16.3000, "lon": 80.5500 },
+    "boundary": [
+      { "lat": 16.2997, "lon": 80.5497 },
+      { "lat": 16.3003, "lon": 80.5497 },
+      { "lat": 16.3003, "lon": 80.5503 },
+      { "lat": 16.2997, "lon": 80.5503 },
+      { "lat": 16.2997, "lon": 80.5497 }
+    ],
+    "cropCycleId": "cycle_4"
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "village_gudivada_1",
+    "name": "Mudinepalli",
+    "mandalId": "mandal_krishna_1"
+  },
+  {
+    "id": "village_gudivada_2",
+    "name": "Peda Gollapalli",
+    "mandalId": "mandal_krishna_1"
+  },
+  {
+    "id": "village_avanigadda_1",
+    "name": "Brahmadevam",
+    "mandalId": "mandal_krishna_2"
+  },
+  {
+    "id": "village_avanigadda_2",
+    "name": "Chinamolakalamarru",
+    "mandalId": "mandal_krishna_2"
+  },
+  {
+    "id": "village_machilipatnam_1",
+    "name": "Konduru",
+    "mandalId": "mandal_krishna_3"
+  },
+  {
+    "id": "village_machilipatnam_2",
+    "name": "Challapalli",
+    "mandalId": "mandal_krishna_3"
+  },
+  {
+    "id": "village_vuyyuru_1",
+    "name": "Pamarru",
+    "mandalId": "mandal_krishna_4"
+  },
+  {
+    "id": "village_vuyyuru_2",
+    "name": "Kanchikacherla",
+    "mandalId": "mandal_krishna_4"
+  },
+  {
+    "id": "village_tenali_1",
+    "name": "Vemuru",
+    "mandalId": "mandal_guntur_1"
+  },
+  {
+    "id": "village_tenali_2",
+    "name": "Kolluru",
+    "mandalId": "mandal_guntur_1"
+  },
+  {
+    "id": "village_prathipadu_1",
+    "name": "Namburu",
+    "mandalId": "mandal_guntur_2"
+  },
+  {
+    "id": "village_prathipadu_2",
+    "name": "Pedakakani",
+    "mandalId": "mandal_guntur_2"
+  },
+  {
+    "id": "village_bapatla_1",
+    "name": "Nizampatnam",
+    "mandalId": "mandal_guntur_3"
+  },
+  {
+    "id": "village_bapatla_2",
+    "name": "Karlapalem",
+    "mandalId": "mandal_guntur_3"
+  },
+  {
+    "id": "village_repalle_1",
+    "name": "Vetapalem",
+    "mandalId": "mandal_guntur_4"
+  },
+  {
+    "id": "village_repalle_2",
+    "name": "Tsunduru",
+    "mandalId": "mandal_guntur_4"
+  }
+]

@@ -1,0 +1,75 @@
+[
+  {
+    "id": "risk_1",
+    "plotId": "plot_1",
+    "date": "2025-01-09",
+    "hazard": "PADDY_BLAST",
+    "score": 75,
+    "severity": "red",
+    "messageKey": "hazard.PADDY_BLAST",
+    "explain": [
+      "Relative humidity >= 90% (actual: 95%)",
+      "Temperature in range 24-28°C (actual: 26°C)",
+      "Rain >= 10mm in last 24 hours (actual: 22mm)"
+    ],
+    "ack": false
+  },
+  {
+    "id": "risk_2",
+    "plotId": "plot_1",
+    "date": "2025-01-08",
+    "hazard": "PADDY_BLB",
+    "score": 52,
+    "severity": "orange",
+    "messageKey": "hazard.PADDY_BLB",
+    "explain": [
+      "Temperature in range 25-34°C (actual: 24°C)",
+      "Relative humidity > 70% (actual: 93%)",
+      "Wind speed >= 8 m/s in last 24 hours (actual: 8.5 m/s)"
+    ],
+    "ack": true
+  },
+  {
+    "id": "risk_3",
+    "plotId": "plot_3",
+    "date": "2025-01-09",
+    "hazard": "CHILLI_ANTHRACNOSE",
+    "score": 68,
+    "severity": "orange",
+    "messageKey": "hazard.CHILLI_ANTHRACNOSE",
+    "explain": [
+      "Temperature near 27°C (actual: 28°C, tolerance: 2°C)",
+      "Relative humidity >= 80% (actual: 94%)",
+      "Rain >= 5mm in last 24 hours (actual: 18mm)"
+    ],
+    "ack": false
+  },
+  {
+    "id": "risk_4",
+    "plotId": "plot_4",
+    "date": "2025-01-07",
+    "hazard": "CHILLI_THRIPS",
+    "score": 45,
+    "severity": "orange",
+    "messageKey": "hazard.CHILLI_THRIPS",
+    "explain": [
+      "VPD >= 1.6 (actual: 2.0)",
+      "Low rainfall in last 3 days (actual: 0mm)"
+    ],
+    "ack": false
+  },
+  {
+    "id": "risk_5",
+    "plotId": "plot_2",
+    "date": "2025-01-10",
+    "hazard": "FLOOD",
+    "score": 35,
+    "severity": "green",
+    "messageKey": "hazard.FLOOD",
+    "explain": [
+      "Delta region indicator present",
+      "Rainfall in last 3 days (actual: 52mm)"
+    ],
+    "ack": false
+  }
+]

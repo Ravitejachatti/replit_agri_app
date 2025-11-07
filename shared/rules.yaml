@@ -1,0 +1,114 @@
+- id: PADDY_BLAST
+  severity_thresholds:
+    green: 0
+    orange: 40
+    red: 70
+  clauses:
+    - all:
+        - metric: rh_pct
+          op: ">="
+          value: 90
+          window: today
+        - metric: tmean_c
+          op: between
+          value: [24, 28]
+          window: today
+        - metric: leaf_wet_proxy
+          op: ">="
+          value: 4
+          window: today
+      weight: 30
+    - any:
+        - metric: rain_mm
+          op: ">="
+          value: 10
+          window: prev24h
+        - metric: dew_morning
+          op: "=="
+          value: true
+          window: today
+      weight: 20
+  messageKey: hazard.PADDY_BLAST
+
+- id: PADDY_BLB
+  severity_thresholds:
+    green: 0
+    orange: 40
+    red: 70
+  clauses:
+    - all:
+        - metric: tmean_c
+          op: between
+          value: [25, 34]
+          window: today
+        - metric: rh_pct
+          op: ">"
+          value: 70
+          window: today
+        - metric: wind_ms
+          op: ">="
+          value: 8
+          window: prev24h
+      weight: 35
+  messageKey: hazard.PADDY_BLB
+
+- id: CHILLI_ANTHRACNOSE
+  severity_thresholds:
+    green: 0
+    orange: 40
+    red: 70
+  clauses:
+    - all:
+        - metric: tmean_c
+          op: near
+          value: 27
+          tol: 2
+          window: today
+        - metric: rh_pct
+          op: ">="
+          value: 80
+          window: today
+        - metric: rain_mm
+          op: ">="
+          value: 5
+          window: prev24h
+      weight: 30
+  messageKey: hazard.CHILLI_ANTHRACNOSE
+
+- id: CHILLI_THRIPS
+  severity_thresholds:
+    green: 0
+    orange: 40
+    red: 70
+  clauses:
+    - all:
+        - metric: vpd
+          op: ">="
+          value: 1.6
+          window: today
+        - metric: rain_mm
+          op: "<"
+          value: 2
+          window: rolling_3d
+      weight: 30
+  messageKey: hazard.CHILLI_THRIPS
+
+- id: FLOOD
+  severity_thresholds:
+    green: 0
+    orange: 40
+    red: 70
+  clauses:
+    - all:
+        - metric: is_delta
+          op: "=="
+          value: true
+        - metric: barrage_warning
+          op: "=="
+          value: true
+        - metric: rain_mm
+          op: ">="
+          value: 60
+          window: rolling_3d
+      weight: 40
+  messageKey: hazard.FLOOD

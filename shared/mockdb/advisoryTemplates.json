@@ -1,0 +1,51 @@
+[
+  {
+    "id": "template_1",
+    "hazard": "GENERIC",
+    "messageKey": "advice.irrigate.now",
+    "channels": ["IN_APP", "SMS"],
+    "placeholders": ["mm"]
+  },
+  {
+    "id": "template_2",
+    "hazard": "GENERIC",
+    "messageKey": "advice.avoid.spray.rain",
+    "channels": ["IN_APP", "SMS", "WHATSAPP"],
+    "placeholders": []
+  },
+  {
+    "id": "template_3",
+    "hazard": "PADDY_BLAST",
+    "messageKey": "advice.blast.fungicide",
+    "channels": ["IN_APP", "SMS", "WHATSAPP"],
+    "placeholders": []
+  },
+  {
+    "id": "template_4",
+    "hazard": "PADDY_BLB",
+    "messageKey": "advice.blb.copper",
+    "channels": ["IN_APP", "SMS", "WHATSAPP"],
+    "placeholders": []
+  },
+  {
+    "id": "template_5",
+    "hazard": "CHILLI_ANTHRACNOSE",
+    "messageKey": "advice.anthracnose.spray",
+    "channels": ["IN_APP", "SMS", "WHATSAPP"],
+    "placeholders": []
+  },
+  {
+    "id": "template_6",
+    "hazard": "CHILLI_THRIPS",
+    "messageKey": "advice.thrips.action",
+    "channels": ["IN_APP", "SMS", "WHATSAPP"],
+    "placeholders": []
+  },
+  {
+    "id": "template_7",
+    "hazard": "FLOOD",
+    "messageKey": "advice.flood.prepare",
+    "channels": ["IN_APP", "SMS", "WHATSAPP", "IVR"],
+    "placeholders": []
+  }
+]

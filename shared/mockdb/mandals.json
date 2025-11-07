@@ -1,0 +1,42 @@
+[
+  {
+    "id": "mandal_krishna_1",
+    "name": "Gudivada",
+    "district": "Krishna"
+  },
+  {
+    "id": "mandal_krishna_2",
+    "name": "Avanigadda",
+    "district": "Krishna"
+  },
+  {
+    "id": "mandal_krishna_3",
+    "name": "Machilipatnam",
+    "district": "Krishna"
+  },
+  {
+    "id": "mandal_krishna_4",
+    "name": "Vuyyuru",
+    "district": "Krishna"
+  },
+  {
+    "id": "mandal_guntur_1",
+    "name": "Tenali",
+    "district": "Guntur"
+  },
+  {
+    "id": "mandal_guntur_2",
+    "name": "Prathipadu",
+    "district": "Guntur"
+  },
+  {
+    "id": "mandal_guntur_3",
+    "name": "Bapatla",
+    "district": "Guntur"
+  },
+  {
+    "id": "mandal_guntur_4",
+    "name": "Repalle",
+    "district": "Guntur"
+  }
+]
